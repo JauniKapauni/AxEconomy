@@ -1,0 +1,11 @@
+name: AxEconomy
+description: $description
+prefix: AxEconomy
+version: '${version}'
+
+main: de.jaunikapauni.axeconomy.AxEconomy
+api-version: '26.1.2'
+load: POSTWORLD
+
+authors: [ JauniKapauni ]
+website: https://github.com/JauniKapauni
