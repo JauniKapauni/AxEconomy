@@ -9,3 +9,7 @@ load: POSTWORLD
 
 authors: [ JauniKapauni ]
 website: https://github.com/JauniKapauni
+
+commands:
+  money:
+    usage: /money <set|add|remove|pay> <player> <amount>

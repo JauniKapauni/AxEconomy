@@ -1,6 +1,8 @@
 package de.jaunikapauni.axeconomy;
 
+import de.jaunikapauni.axeconomy.command.MoneyCommand;
 import de.jaunikapauni.axeconomy.manager.DatabaseManager;
+import de.jaunikapauni.axeconomy.manager.EconomyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,6 +11,10 @@ public final class AxEconomy extends JavaPlugin {
     public DatabaseManager getDatabaseManager(){
         return databaseManager;
     }
+    EconomyManager economyManager;
+    public EconomyManager getEconomyManager(){
+        return economyManager;
+    }
 
     @Override
     public void onEnable() {
@@ -16,6 +22,7 @@ public final class AxEconomy extends JavaPlugin {
         saveDefaultConfig();
         try{
             databaseManager = new DatabaseManager(this);
+            economyManager = new EconomyManager(this);
             if(databaseManager.initDatabaseTable1() == false){
                 getLogger().severe("Error creating balances table!");
                 Bukkit.getServer().shutdown();
@@ -23,6 +30,7 @@ public final class AxEconomy extends JavaPlugin {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        getCommand("money").setExecutor(new MoneyCommand(this));
     }
 
     @Override
