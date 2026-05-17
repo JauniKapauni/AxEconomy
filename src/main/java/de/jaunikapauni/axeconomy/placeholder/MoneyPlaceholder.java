@@ -22,7 +22,7 @@ public class MoneyPlaceholder extends PlaceholderExpansion {
     }
     @Override
     public @NotNull String getVersion(){
-        return "0.0.0";
+        return "1.0.0";
     }
     @Override
     public @Nullable String onRequest(OfflinePlayer p, @NotNull String params){
