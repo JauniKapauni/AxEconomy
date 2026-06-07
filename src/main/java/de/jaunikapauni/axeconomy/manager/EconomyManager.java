@@ -91,7 +91,7 @@ public class EconomyManager {
                 if(!messages.isEmpty()){
                     try(PreparedStatement ps2 = conn.prepareStatement("DELETE FROM pending_notifications WHERE uuid = ?")){
                         ps2.setString(1, uuid.toString());
-                        ps.executeUpdate();
+                        ps2.executeUpdate();
                     }
                 }
             }
