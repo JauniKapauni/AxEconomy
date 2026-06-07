@@ -1,6 +1,7 @@
 package de.jaunikapauni.axeconomy;
 
 import de.jaunikapauni.axeconomy.command.MoneyCommand;
+import de.jaunikapauni.axeconomy.command.MoneyTabCompleter;
 import de.jaunikapauni.axeconomy.manager.DatabaseManager;
 import de.jaunikapauni.axeconomy.manager.EconomyManager;
 import de.jaunikapauni.axeconomy.placeholder.MoneyPlaceholder;
@@ -32,6 +33,7 @@ public final class AxEconomy extends JavaPlugin {
             throw new RuntimeException(e);
         }
         getCommand("money").setExecutor(new MoneyCommand(this));
+        getCommand("money").setTabCompleter(new MoneyTabCompleter());
         if(Bukkit.getPluginManager().getPlugin("PlaceHolderAPI") != null){
             new MoneyPlaceholder(this).register();
             getLogger().info("Successfully registered AxEconomy placeholders!");
