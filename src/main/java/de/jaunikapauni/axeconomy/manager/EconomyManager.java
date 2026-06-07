@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class EconomyManager {
@@ -63,5 +65,52 @@ public class EconomyManager {
             return;
         }
         setBalance(uuid, current - amount);
+    }
+
+    public void addPendingNotification(UUID uuid, String message){
+        try(Connection conn = reference.getDatabaseManager().getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("INSERT INTO pending_notifications(uuid, message) VALUES (?, ?)")){
+                ps.setString(1, uuid.toString());
+                ps.setString(2, message);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getAndDeleteNotifications(UUID uuid) throws SQLException {
+        List<String> messages = new ArrayList<>();
+        try(Connection conn = reference.getDatabaseManager().getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("SELECT message FROM pending_notifications WHERE uuid = ?")){
+                ps.setString(1, uuid.toString());
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    messages.add(rs.getString("message"));
+                }
+                if(!messages.isEmpty()){
+                    try(PreparedStatement ps2 = conn.prepareStatement("DELETE FROM pending_notifications WHERE uuid = ?")){
+                        ps2.setString(1, uuid.toString());
+                        ps.executeUpdate();
+                    }
+                }
+            }
+        }
+        return messages;
+    }
+
+    public List<UUID> getPendingUUIDs(){
+        List<UUID> uuids = new ArrayList<>();
+        try(Connection conn = reference.getDatabaseManager().getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT uuid FROM pending_notifications")){
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    uuids.add(UUID.fromString(rs.getString("uuid")));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return uuids;
     }
 }

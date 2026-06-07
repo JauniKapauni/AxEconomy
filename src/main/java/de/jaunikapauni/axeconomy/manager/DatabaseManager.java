@@ -45,4 +45,15 @@ public class DatabaseManager {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean initDatabaseTable2(){
+        try(Connection conn = getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS pending_notifications(uuid VARCHAR(255) NOT NULL, message VARCHAR(255))")){
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
 }
