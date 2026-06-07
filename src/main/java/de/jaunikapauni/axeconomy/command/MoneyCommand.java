@@ -52,23 +52,23 @@ public class MoneyCommand implements CommandExecutor {
 
         switch (subCommand){
             case "set":
-                reference.getEconomyManager().setBalance(targetPlayer.getUniqueId(), amount);
-                sourcePlayer.sendMessage("You have set the balance of " + targetName + " to " + balance);
-                sendOrStore(targetPlayer, targetUUID, "Your balance was set to " + balance);
+                reference.getEconomyManager().setBalance(targetUUID, amount);
+                sourcePlayer.sendMessage("You have set the balance of " + targetName + " to " + amount);
+                sendOrStore(targetPlayer, targetUUID, "Your balance was set to " + amount);
                 break;
             case "add":
-                reference.getEconomyManager().addBalance(targetPlayer.getUniqueId(), amount);
+                reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have added " + amount + " to the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " was added to your balance");
                 break;
             case "remove":
-                reference.getEconomyManager().removeBalance(targetPlayer.getUniqueId(), amount);
+                reference.getEconomyManager().removeBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have removed " + amount + " from the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " were removed from your balance");
                 break;
             case "pay":
                 reference.getEconomyManager().removeBalance(sourcePlayer.getUniqueId(), amount);
-                reference.getEconomyManager().addBalance(targetPlayer.getUniqueId(), amount);
+                reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have payed " + amount + " to " + targetName);
                 sendOrStore(targetPlayer, targetUUID, "You got paid " + amount + " from " + sourcePlayer.getName());
                 return true;
