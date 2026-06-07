@@ -57,6 +57,17 @@ public class DatabaseManager {
         }
     }
 
+    public boolean initDatabaseTable3(){
+        try(Connection conn = getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(255) PRIMARY KEY NOT NULL, name VARCHAR(255), online BOOLEAN)")){
+                ps.executeUpdate();
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void close(){
         if(hikari != null && !hikari.isClosed()){
             hikari.close();

@@ -1,5 +1,6 @@
 package de.jaunikapauni.axeconomy.command;
 
+import de.jaunikapauni.axeconomy.AxEconomy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -10,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MoneyTabCompleter implements TabCompleter {
+    AxEconomy reference;
+    public MoneyTabCompleter(AxEconomy reference){
+        this.reference = reference;
+    }
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         List<String> cmds = new ArrayList<>();
@@ -20,6 +25,16 @@ public class MoneyTabCompleter implements TabCompleter {
         if(args.length == 1){
             return cmds;
         }
-        return cmds;
+        List<String> players = new ArrayList<>();
+        if(args.length == 2){
+            String input = args[1];
+            for(String name : reference.getPlayerManager().getOnlinePlayers()){
+                if(name.toLowerCase().startsWith(input)){
+                    players.add(name);
+                }
+            }
+            return players;
+        }
+        return null;
     }
 }

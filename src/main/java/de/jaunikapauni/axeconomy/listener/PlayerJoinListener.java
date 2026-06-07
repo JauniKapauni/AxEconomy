@@ -23,5 +23,6 @@ public class PlayerJoinListener implements Listener {
         for(String msg : messages){
             p.sendMessage(msg);
         }
+        reference.getPlayerManager().updatePlayerStatus(p.getUniqueId(), p.getName(), true);
     }
 }
