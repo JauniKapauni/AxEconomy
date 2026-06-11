@@ -31,6 +31,10 @@ public class MoneyCommand implements CommandExecutor {
 
         String subCommand = args[0].toLowerCase();
         Player sourcePlayer = (Player) sender;
+        if(!sourcePlayer.hasPermission("axcore.money")){
+            sourcePlayer.sendMessage("You don't have the permission! [axcore.money]");
+            return true;
+        }
         Player targetPlayer = Bukkit.getServer().getPlayerExact(args[1]);
         Double amount = Double.parseDouble(args[2]);
         Double balance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
