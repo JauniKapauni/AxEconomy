@@ -28,6 +28,8 @@ database:
   password:
 ```
 ---
+## Commands & Permissions
+- `/money` - `axeconomy.money`
 ## Support
 Discord: [AxForge](https://discord.gg/rYSxV4daS8)
 ---
