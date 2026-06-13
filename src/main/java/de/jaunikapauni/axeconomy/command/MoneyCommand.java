@@ -28,7 +28,9 @@ public class MoneyCommand implements CommandExecutor {
             sender.sendMessage("Your balance: " + balance);
             return true;
         }
-
+        if(args.length < 3){
+            return false;
+        }
         String subCommand = args[0].toLowerCase();
         Player sourcePlayer = (Player) sender;
         if(!sourcePlayer.hasPermission("axeconomy.money")){
