@@ -31,7 +31,7 @@ public class MoneyCommand implements CommandExecutor {
 
         String subCommand = args[0].toLowerCase();
         Player sourcePlayer = (Player) sender;
-        if(!sourcePlayer.hasPermission("axcore.money")){
+        if(!sourcePlayer.hasPermission("axeconomy.money")){
             sourcePlayer.sendMessage("You don't have the permission! [axcore.money]");
             return true;
         }
