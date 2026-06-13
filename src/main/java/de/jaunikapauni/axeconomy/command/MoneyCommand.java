@@ -2,6 +2,7 @@ package de.jaunikapauni.axeconomy.command;
 
 import de.jaunikapauni.axeconomy.AxEconomy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +39,13 @@ public class MoneyCommand implements CommandExecutor {
             return true;
         }
         Player targetPlayer = Bukkit.getServer().getPlayerExact(args[1]);
-        Double amount = Double.parseDouble(args[2]);
+        Double amount;
+        try{
+            amount = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            sourcePlayer.sendMessage(ChatColor.RED + "Amount must be a number!");
+            return false;
+        }
         Double balance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
         UUID targetUUID;
         String targetName;
