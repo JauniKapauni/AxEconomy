@@ -30,8 +30,10 @@ database:
 ---
 ## Commands & Permissions
 - `/money` - `axeconomy.money`
+---
 ## Support
 Discord: [AxForge](https://discord.gg/rYSxV4daS8)
+
 ---
 ## License
 AxEconomy is licensed under the permissive MIT License. Please see [LICENSE](https://github.com/JauniKapauni/AxEconomy/blob/master/LICENSE) for more info.
