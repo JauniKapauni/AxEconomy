@@ -1,5 +1,7 @@
 package de.jaunikapauni.axeconomy;
 
+import de.jaunikapauni.axeconomy.api.EconomyAPI;
+import de.jaunikapauni.axeconomy.api.EconomyService;
 import de.jaunikapauni.axeconomy.command.MoneyCommand;
 import de.jaunikapauni.axeconomy.command.MoneyTabCompleter;
 import de.jaunikapauni.axeconomy.listener.PlayerJoinListener;
@@ -28,6 +30,10 @@ public final class AxEconomy extends JavaPlugin {
     PlayerManager playerManager;
     public PlayerManager getPlayerManager(){
         return playerManager;
+    }
+    EconomyAPI economyAPI;
+    public EconomyAPI getEconomyAPI(){
+        return economyAPI;
     }
 
     @Override
@@ -80,6 +86,7 @@ public final class AxEconomy extends JavaPlugin {
         getLogger().info(String.join("Authors: " + ", ", getDescription().getAuthors()));
         getLogger().info("----------------------------------------");
         getLogger().info("");
+        economyAPI = new EconomyService(economyManager);
     }
 
     @Override
