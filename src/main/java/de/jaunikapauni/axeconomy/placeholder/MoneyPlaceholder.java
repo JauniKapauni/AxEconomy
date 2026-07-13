@@ -27,7 +27,8 @@ public class MoneyPlaceholder extends PlaceholderExpansion {
     @Override
     public @Nullable String onRequest(OfflinePlayer p, @NotNull String params){
         if(params.equalsIgnoreCase("balance")){
-            return String.valueOf(reference.getEconomyManager().getBalance(p.getUniqueId()));
+            double balance = reference.getEconomyManager().getBalance(p.getUniqueId());
+            return String.format("%.2f", balance);
         }
         return null;
     }
