@@ -65,21 +65,37 @@ public class MoneyCommand implements CommandExecutor {
 
         switch (subCommand){
             case "set":
+                if(!sourcePlayer.hasPermission("axeconomy.money.set")){
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.set]");
+                    return true;
+                }
                 reference.getEconomyManager().setBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have set the balance of " + targetName + " to " + amount);
                 sendOrStore(targetPlayer, targetUUID, "Your balance was set to " + amount);
                 break;
             case "add":
+                if(!sourcePlayer.hasPermission("axeconomy.money.add")){
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.add]");
+                    return true;
+                }
                 reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have added " + amount + " to the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " was added to your balance");
                 break;
             case "remove":
+                if(!sourcePlayer.hasPermission("axeconomy.remove")){
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.remove]");
+                    return true;
+                }
                 reference.getEconomyManager().removeBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have removed " + amount + " from the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " were removed from your balance");
                 break;
             case "pay":
+                if(!sourcePlayer.hasPermission("axeconomy.pay")){
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.pay]");
+                    return true;
+                }
                 reference.getEconomyManager().removeBalance(sourcePlayer.getUniqueId(), amount);
                 reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have payed " + amount + " to " + targetName);
