@@ -18,25 +18,38 @@ public class EconomyService implements EconomyAPI{
 
     @Override
     public boolean has(UUID uuid, double amount){
+        if(amount <= 0){
+            return false;
+        }
         return getBalance(uuid) >= amount;
     }
 
     @Override
     public boolean withdraw(UUID uuid, double amount){
-        if(!has(uuid, amount)){
+        if(amount <= 0){
             return false;
         }
-        manager.setBalance(uuid, getBalance(uuid) - amount);
+        double balance = getBalance(uuid);
+        if(balance < amount){
+            return false;
+        }
+        manager.setBalance(uuid, balance - amount);
         return true;
     }
 
     @Override
     public void deposit(UUID uuid, double amount){
+        if(amount <= 0){
+            return;
+        }
         manager.setBalance(uuid, getBalance(uuid) + amount);
     }
 
     @Override
     public void setBalance(UUID uuid, double amount){
+        if(amount < 0){
+            return;
+        }
         manager.setBalance(uuid, amount);
     }
 }
