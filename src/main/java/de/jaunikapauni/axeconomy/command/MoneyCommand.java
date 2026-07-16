@@ -96,6 +96,11 @@ public class MoneyCommand implements CommandExecutor {
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.pay]");
                     return true;
                 }
+                double senderBalance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
+                if(senderBalance < amount){
+                    sourcePlayer.sendMessage(ChatColor.RED + "You don't have enough money!");
+                    return true;
+                }
                 reference.getEconomyManager().removeBalance(sourcePlayer.getUniqueId(), amount);
                 reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have payed " + amount + " to " + targetName);
