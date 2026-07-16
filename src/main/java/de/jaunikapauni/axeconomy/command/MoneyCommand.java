@@ -83,7 +83,7 @@ public class MoneyCommand implements CommandExecutor {
                 sendOrStore(targetPlayer, targetUUID, amount + " was added to your balance");
                 break;
             case "remove":
-                if(!sourcePlayer.hasPermission("axeconomy.remove")){
+                if(!sourcePlayer.hasPermission("axeconomy.money.remove")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.remove]");
                     return true;
                 }
@@ -92,7 +92,7 @@ public class MoneyCommand implements CommandExecutor {
                 sendOrStore(targetPlayer, targetUUID, amount + " were removed from your balance");
                 break;
             case "pay":
-                if(!sourcePlayer.hasPermission("axeconomy.pay")){
+                if(!sourcePlayer.hasPermission("axeconomy.money.pay")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.pay]");
                     return true;
                 }
