@@ -18,11 +18,24 @@ public class PlayerManager {
 
     public void updatePlayerStatus(UUID uuid, String name, boolean online){
         try(Connection conn = reference.getDatabaseManager().getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement("REPLACE players(uuid, name, online) VALUES (?, ?, ?)")){
-                ps.setString(1, uuid.toString());
-                ps.setString(2, name);
-                ps.setBoolean(3, online);
-                ps.executeUpdate();
+            try(PreparedStatement select = conn.prepareStatement("SELECT uuid FROM players WHERE uuid = ?")){
+                select.setString(1, uuid.toString());
+                ResultSet selectrs = select.executeQuery();
+                if(selectrs.next()){
+                    try(PreparedStatement update = conn.prepareStatement("UPDATE players SET name = ?, online = ? WHERE uuid = ?")){
+                        update.setString(1, name);
+                        update.setBoolean(2, online);
+                        update.setString(3, uuid.toString());
+                        update.executeUpdate();
+                    }
+                } else {
+                    try(PreparedStatement insert = conn.prepareStatement("INSERT INTO players(uuid, name, online) VALUES (?, ?, ?)")){
+                        insert.setString(1, uuid.toString());
+                        insert.setString(2, name);
+                        insert.setBoolean(3, online);
+                        insert.executeUpdate();
+                    }
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
