@@ -45,7 +45,7 @@ public class PlayerManager {
     public List<String> getOnlinePlayers(){
         List<String> list = new ArrayList<>();
         try(Connection conn = reference.getDatabaseManager().getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement("SELECT name FROM players")){
+            try(PreparedStatement ps = conn.prepareStatement("SELECT name FROM players WHERE online = true")){
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     list.add(rs.getString("name"));
