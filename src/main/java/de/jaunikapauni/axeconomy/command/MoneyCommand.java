@@ -84,7 +84,7 @@ public class MoneyCommand implements CommandExecutor {
                 break;
             case "remove":
                 if(!sourcePlayer.hasPermission("axeconomy.remove")){
-                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.remove]");
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.remove]");
                     return true;
                 }
                 reference.getEconomyManager().removeBalance(targetUUID, amount);
@@ -93,7 +93,7 @@ public class MoneyCommand implements CommandExecutor {
                 break;
             case "pay":
                 if(!sourcePlayer.hasPermission("axeconomy.pay")){
-                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.pay]");
+                    sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.pay]");
                     return true;
                 }
                 double senderBalance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
