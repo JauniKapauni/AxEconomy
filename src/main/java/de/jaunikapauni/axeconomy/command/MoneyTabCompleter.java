@@ -27,7 +27,7 @@ public class MoneyTabCompleter implements TabCompleter {
         }
         List<String> players = new ArrayList<>();
         if(args.length == 2){
-            String input = args[1];
+            String input = args[1].toLowerCase();
             for(String name : reference.getPlayerManager().getOnlinePlayers()){
                 if(name.toLowerCase().startsWith(input)){
                     players.add(name);
