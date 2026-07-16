@@ -37,7 +37,7 @@ public class DatabaseManager {
 
     public boolean initDatabaseTable1(){
         try(Connection conn = getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS balances (uuid VARCHAR(255) NOT NULL PRIMARY KEY, balance DOUBLE)")){
+            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS balances (uuid VARCHAR(36) NOT NULL PRIMARY KEY, balance DECIMAL(16, 2))")){
                 ps.executeUpdate();
                 return true;
             }
