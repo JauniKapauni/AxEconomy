@@ -42,6 +42,10 @@ public class MoneyCommand implements CommandExecutor {
         Double amount;
         try{
             amount = Double.parseDouble(args[2]);
+            if(amount <= 0){
+                sourcePlayer.sendMessage(ChatColor.RED + "Amount must be positive!");
+                return true;
+            }
         } catch (NumberFormatException e) {
             sourcePlayer.sendMessage(ChatColor.RED + "Amount must be a number!");
             return false;
