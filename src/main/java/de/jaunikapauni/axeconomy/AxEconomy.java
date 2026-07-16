@@ -75,7 +75,7 @@ public final class AxEconomy extends JavaPlugin {
                 }
             }
         }, 100L, 100L);
-        if(Bukkit.getPluginManager().getPlugin("PlaceHolderAPI") != null){
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new MoneyPlaceholder(this).register();
             getLogger().info("Successfully registered AxEconomy placeholders!");
         }
