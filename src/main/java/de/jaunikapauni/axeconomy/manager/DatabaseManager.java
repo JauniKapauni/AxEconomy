@@ -48,7 +48,7 @@ public class DatabaseManager {
 
     public boolean initDatabaseTable2(){
         try(Connection conn = getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS pending_notifications(uuid VARCHAR(255) NOT NULL, message VARCHAR(255))")){
+            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS pending_notifications(uuid VARCHAR(36) NOT NULL, message VARCHAR(255))")){
                 ps.executeUpdate();
                 return true;
             }
@@ -59,7 +59,7 @@ public class DatabaseManager {
 
     public boolean initDatabaseTable3(){
         try(Connection conn = getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(255) PRIMARY KEY NOT NULL, name VARCHAR(255), online BOOLEAN)")){
+            try(PreparedStatement ps = conn.prepareStatement("CREATE TABLE IF NOT EXISTS players (uuid VARCHAR(36) PRIMARY KEY NOT NULL, name VARCHAR(16), online BOOLEAN)")){
                 ps.executeUpdate();
                 return true;
             }
