@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EconomyManager {
 
@@ -18,53 +20,43 @@ public class EconomyManager {
         this.reference = reference;
     }
 
+    Map<UUID, Double> balances = new ConcurrentHashMap<>();
+
     public double getBalance(UUID uuid) {
+        Double cached = balances.get(uuid);
+        if(cached != null){
+            return cached;
+        }
         try (Connection conn = reference.getDatabaseManager().getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT balance FROM balances WHERE uuid = ?");
             ps.setString(1, uuid.toString());
             ResultSet rs = ps.executeQuery();
+            double balance = 0.0;
             if (rs.next()) {
-                return rs.getDouble("balance");
-            } else {
-                setBalance(uuid, 0.0);
-                return 0.0;
+                balance = rs.getDouble("balance");
             }
+            balances.put(uuid, balance);
+            return balance;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void setBalance(UUID uuid, Double amount) {
-        try (Connection conn = reference.getDatabaseManager().getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT balance FROM balances WHERE uuid = ?");
-            ps.setString(1, uuid.toString());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                PreparedStatement ps1 = conn.prepareStatement("UPDATE balances SET balance = ? WHERE uuid = ?");
-                ps1.setDouble(1, amount);
-                ps1.setString(2, uuid.toString());
-                ps1.execute();
-            } else {
-                PreparedStatement ps2 = conn.prepareStatement("INSERT INTO balances(uuid, balance) VALUES(?, ?)");
-                ps2.setString(1, uuid.toString());
-                ps2.setDouble(2, amount);
-                ps2.executeUpdate();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        balances.put(uuid, amount);
     }
 
     public void addBalance(UUID uuid, Double amount) {
         setBalance(uuid, getBalance(uuid) + amount);
     }
 
-    public void removeBalance(UUID uuid, Double amount) {
+    public boolean removeBalance(UUID uuid, Double amount) {
         double current = getBalance(uuid);
         if (current < amount) {
-            return;
+            return false;
         }
         setBalance(uuid, current - amount);
+        return true;
     }
 
     public void addPendingNotification(UUID uuid, String message){
@@ -112,5 +104,44 @@ public class EconomyManager {
             throw new RuntimeException(e);
         }
         return uuids;
+    }
+
+    public void saveCachedBalance(UUID uuid){
+        Double balance = balances.get(uuid);
+        if(balance == null){
+            return;
+        }
+        try(Connection conn = reference.getDatabaseManager().getConnection()){
+            try(PreparedStatement ps = conn.prepareStatement("SELECT uuid FROM balances WHERE uuid = ?")){
+                ps.setString(1, uuid.toString());
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){
+                    try(PreparedStatement update = conn.prepareStatement("UPDATE balances SET balance = ? WHERE uuid = ?")){
+                        update.setDouble(1, balance);
+                        update.setString(2, uuid.toString());
+                        update.executeUpdate();
+                    }
+                } else {
+                    try(PreparedStatement insert = conn.prepareStatement("INSERT INTO balances(uuid, balance) VALUES (?, ?)")){
+                        insert.setString(1, uuid.toString());
+                        insert.setDouble(2, balance);
+                        insert.executeUpdate();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadBalance(UUID uuid){
+        if(balances.containsKey(uuid)){
+            return;
+        }
+        getBalance(uuid);
+    }
+
+    public void removeCache(UUID uuid){
+        balances.remove(uuid);
     }
 }

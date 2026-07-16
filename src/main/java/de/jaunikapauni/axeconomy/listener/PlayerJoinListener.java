@@ -19,6 +19,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) throws SQLException {
         Player p = e.getPlayer();
+        reference.getEconomyManager().loadBalance(p.getUniqueId());
         List<String> messages = reference.getEconomyManager().getAndDeleteNotifications(p.getUniqueId());
         for(String msg : messages){
             p.sendMessage(msg);
