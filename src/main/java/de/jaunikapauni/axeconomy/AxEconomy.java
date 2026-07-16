@@ -20,19 +20,26 @@ import java.util.UUID;
 
 public final class AxEconomy extends JavaPlugin {
     DatabaseManager databaseManager;
-    public DatabaseManager getDatabaseManager(){
+
+    public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }
+
     EconomyManager economyManager;
-    public EconomyManager getEconomyManager(){
+
+    public EconomyManager getEconomyManager() {
         return economyManager;
     }
+
     PlayerManager playerManager;
-    public PlayerManager getPlayerManager(){
+
+    public PlayerManager getPlayerManager() {
         return playerManager;
     }
+
     EconomyAPI economyAPI;
-    public EconomyAPI getEconomyAPI(){
+
+    public EconomyAPI getEconomyAPI() {
         return economyAPI;
     }
 
@@ -40,11 +47,11 @@ public final class AxEconomy extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        try{
+        try {
             databaseManager = new DatabaseManager(this);
             economyManager = new EconomyManager(this);
             playerManager = new PlayerManager(this);
-            if(!databaseManager.initDatabaseTable1() || !databaseManager.initDatabaseTable2() || !databaseManager.initDatabaseTable3()){
+            if (!databaseManager.initDatabaseTable1() || !databaseManager.initDatabaseTable2() || !databaseManager.initDatabaseTable3()) {
                 getLogger().severe("Error creating balances table!");
                 Bukkit.getServer().shutdown();
             }
@@ -55,27 +62,29 @@ public final class AxEconomy extends JavaPlugin {
         getCommand("money").setTabCompleter(new MoneyTabCompleter(this));
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-            @Override
-            public void run() {
-                List<UUID> pending = economyManager.getPendingUUIDs();
-                for(UUID uuid : pending){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            List<UUID> pending = economyManager.getPendingUUIDs();
+            for (UUID uuid : pending) {
+                List<String> messages;
+                try {
+                    messages = economyManager.getAndDeleteNotifications(uuid);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                if (messages.isEmpty()) {
+                    continue;
+                }
+                Bukkit.getScheduler().runTask(this, () -> {
                     Player p = Bukkit.getPlayer(uuid);
-                    if(p != null){
-                        List<String> messages = null;
-                        try {
-                            messages = economyManager.getAndDeleteNotifications(uuid);
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                        for(String msg : messages){
+                    if (p != null) {
+                        for (String msg : messages) {
                             p.sendMessage(msg);
                         }
                     }
-                }
+                });
             }
         }, 100L, 100L);
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new MoneyPlaceholder(this).register();
             getLogger().info("Successfully registered AxEconomy placeholders!");
         }
@@ -92,7 +101,7 @@ public final class AxEconomy extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        for(Player p : Bukkit.getOnlinePlayers()){
+        for (Player p : Bukkit.getOnlinePlayers()) {
             economyManager.saveCachedBalance(p.getUniqueId());
         }
         databaseManager.close();

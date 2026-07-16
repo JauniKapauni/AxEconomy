@@ -1,6 +1,7 @@
 package de.jaunikapauni.axeconomy.listener;
 
 import de.jaunikapauni.axeconomy.AxEconomy;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerJoinListener implements Listener {
 
@@ -17,13 +19,24 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) throws SQLException {
+    public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        reference.getEconomyManager().loadBalance(p.getUniqueId());
-        List<String> messages = reference.getEconomyManager().getAndDeleteNotifications(p.getUniqueId());
-        for(String msg : messages){
-            p.sendMessage(msg);
-        }
-        reference.getPlayerManager().updatePlayerStatus(p.getUniqueId(), p.getName(), true);
+        UUID uuid = p.getUniqueId();
+        String name = p.getName();
+        Bukkit.getScheduler().runTaskAsynchronously(reference, () -> {
+            reference.getEconomyManager().loadBalance(uuid);
+            List<String> messages;
+            try{
+                messages = reference.getEconomyManager().getAndDeleteNotifications(uuid);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            reference.getPlayerManager().updatePlayerStatus(uuid, name, true);
+            Bukkit.getScheduler().runTask(reference, () -> {
+                for(String msg : messages){
+                    p.sendMessage(msg);
+                }
+            });
+        });
     }
 }

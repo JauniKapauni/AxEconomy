@@ -1,6 +1,7 @@
 package de.jaunikapauni.axeconomy.listener;
 
 import de.jaunikapauni.axeconomy.AxEconomy;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -16,8 +17,11 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
         UUID uuid = e.getPlayer().getUniqueId();
-        reference.getEconomyManager().saveCachedBalance(uuid);
-        reference.getEconomyManager().removeCache(uuid);
-        reference.getPlayerManager().updatePlayerStatus(e.getPlayer().getUniqueId(), e.getPlayer().getName(), false);
+        String name = e.getPlayer().getName();
+        Bukkit.getScheduler().runTaskAsynchronously(reference, () -> {
+            reference.getEconomyManager().saveCachedBalance(uuid);
+            reference.getEconomyManager().removeCache(uuid);
+            reference.getPlayerManager().updatePlayerStatus(uuid, name, false);
+        });
     }
 }
