@@ -92,6 +92,9 @@ public final class AxEconomy extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        for(Player p : Bukkit.getOnlinePlayers()){
+            economyManager.saveCachedBalance(p.getUniqueId());
+        }
         databaseManager.close();
     }
 }
