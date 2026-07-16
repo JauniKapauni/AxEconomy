@@ -44,7 +44,7 @@ public final class AxEconomy extends JavaPlugin {
             databaseManager = new DatabaseManager(this);
             economyManager = new EconomyManager(this);
             playerManager = new PlayerManager(this);
-            if(databaseManager.initDatabaseTable1() && databaseManager.initDatabaseTable2() && databaseManager.initDatabaseTable3() == false){
+            if(!databaseManager.initDatabaseTable1() || !databaseManager.initDatabaseTable2() || !databaseManager.initDatabaseTable3()){
                 getLogger().severe("Error creating balances table!");
                 Bukkit.getServer().shutdown();
             }
