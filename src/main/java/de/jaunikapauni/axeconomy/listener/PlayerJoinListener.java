@@ -25,6 +25,8 @@ public class PlayerJoinListener implements Listener {
         String name = p.getName();
         Bukkit.getScheduler().runTaskAsynchronously(reference, () -> {
             reference.getEconomyManager().loadBalance(uuid);
+            double sourcePlayerBalance = reference.getEconomyManager().getBalance(uuid);
+            reference.getLoggingManager().log("SOURCE_PLAYER: " + name + " - " + "TYPE: " + "SET" + " - " + sourcePlayerBalance);
             List<String> messages;
             try{
                 messages = reference.getEconomyManager().getAndDeleteNotifications(uuid);

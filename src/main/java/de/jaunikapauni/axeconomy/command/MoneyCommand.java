@@ -69,6 +69,7 @@ public class MoneyCommand implements CommandExecutor {
 
         switch (subCommand){
             case "set":
+            {
                 if(!sourcePlayer.hasPermission("axeconomy.money.set")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.set]");
                     return true;
@@ -76,8 +77,12 @@ public class MoneyCommand implements CommandExecutor {
                 reference.getEconomyManager().setBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have set the balance of " + targetName + " to " + amount);
                 sendOrStore(targetPlayer, targetUUID, "Your balance was set to " + amount);
+                double targetPlayerBalance = reference.getEconomyManager().getBalance(targetUUID);
+                reference.getLoggingManager().log("PLAYER: " + targetName + " - " + "TYPE: " + "SET" + " - " + targetPlayerBalance);
                 break;
+            }
             case "add":
+            {
                 if(!sourcePlayer.hasPermission("axeconomy.money.add")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.add]");
                     return true;
@@ -85,8 +90,12 @@ public class MoneyCommand implements CommandExecutor {
                 reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have added " + amount + " to the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " was added to your balance");
+                double targetPlayerBalance = reference.getEconomyManager().getBalance(targetUUID);
+                reference.getLoggingManager().log("PLAYER: " + targetName + " - " + "TYPE: " + "ADD" + " - " + targetPlayerBalance);
                 break;
+            }
             case "remove":
+            {
                 if(!sourcePlayer.hasPermission("axeconomy.money.remove")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.remove]");
                     return true;
@@ -94,8 +103,12 @@ public class MoneyCommand implements CommandExecutor {
                 reference.getEconomyManager().removeBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have removed " + amount + " from the balance of " + targetName);
                 sendOrStore(targetPlayer, targetUUID, amount + " were removed from your balance");
+                double targetPlayerBalance = reference.getEconomyManager().getBalance(targetUUID);
+                reference.getLoggingManager().log("PLAYER: " + targetName + " - " + "TYPE: " + "REMOVE" + " - " + targetPlayerBalance);
                 break;
+            }
             case "pay":
+            {
                 if(!sourcePlayer.hasPermission("axeconomy.money.pay")){
                     sourcePlayer.sendMessage("You don't have the permission! [axeconomy.money.pay]");
                     return true;
@@ -109,7 +122,12 @@ public class MoneyCommand implements CommandExecutor {
                 reference.getEconomyManager().addBalance(targetUUID, amount);
                 sourcePlayer.sendMessage("You have payed " + amount + " to " + targetName);
                 sendOrStore(targetPlayer, targetUUID, "You got paid " + amount + " from " + sourcePlayer.getName());
+                double sourcePlayerBalance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
+                reference.getLoggingManager().log("SOURCE_PLAYER: " + sourcePlayer + " - " + "TYPE: " + "SET" + " - " + sourcePlayerBalance);
+                double targetPlayerBalance = reference.getEconomyManager().getBalance(targetUUID);
+                reference.getLoggingManager().log("TARGET_PLAYER: " + targetName + " - " + "TYPE: " + "SET" + " - " + targetPlayerBalance);
                 return true;
+            }
             default:
                 sourcePlayer.sendMessage("Your balance: " + balance);
         }
