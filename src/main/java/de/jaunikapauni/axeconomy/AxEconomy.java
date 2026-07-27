@@ -8,6 +8,7 @@ import de.jaunikapauni.axeconomy.listener.PlayerJoinListener;
 import de.jaunikapauni.axeconomy.listener.PlayerQuitListener;
 import de.jaunikapauni.axeconomy.manager.DatabaseManager;
 import de.jaunikapauni.axeconomy.manager.EconomyManager;
+import de.jaunikapauni.axeconomy.manager.LoggingManager;
 import de.jaunikapauni.axeconomy.manager.PlayerManager;
 import de.jaunikapauni.axeconomy.placeholder.MoneyPlaceholder;
 import org.bukkit.Bukkit;
@@ -42,6 +43,10 @@ public final class AxEconomy extends JavaPlugin {
     public EconomyAPI getEconomyAPI() {
         return economyAPI;
     }
+    LoggingManager loggingManager;
+    public LoggingManager getLoggingManager(){
+        return loggingManager;
+    }
 
     @Override
     public void onEnable() {
@@ -51,6 +56,7 @@ public final class AxEconomy extends JavaPlugin {
             databaseManager = new DatabaseManager(this);
             economyManager = new EconomyManager(this);
             playerManager = new PlayerManager(this);
+            loggingManager = new LoggingManager(this);
             if (!databaseManager.initDatabaseTable1() || !databaseManager.initDatabaseTable2() || !databaseManager.initDatabaseTable3()) {
                 getLogger().severe("Error creating balances table!");
                 Bukkit.getServer().shutdown();
