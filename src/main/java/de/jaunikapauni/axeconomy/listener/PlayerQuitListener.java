@@ -21,7 +21,7 @@ public class PlayerQuitListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(reference, () -> {
             reference.getEconomyManager().saveCachedBalance(uuid);
             double sourcePlayerBalance = reference.getEconomyManager().getBalance(uuid);
-            reference.getLoggingManager().log("SOURCE_PLAYER: " + name + " - " + "TYPE: " + "SET" + " - " + sourcePlayerBalance);
+            reference.getLoggingManager().log("SOURCE_PLAYER: " + name + " - " + "TYPE: " + "QUIT" + " - " + sourcePlayerBalance);
             reference.getEconomyManager().removeCache(uuid);
             reference.getPlayerManager().updatePlayerStatus(uuid, name, false);
         });

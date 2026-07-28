@@ -123,9 +123,9 @@ public class MoneyCommand implements CommandExecutor {
                 sourcePlayer.sendMessage("You have payed " + amount + " to " + targetName);
                 sendOrStore(targetPlayer, targetUUID, "You got paid " + amount + " from " + sourcePlayer.getName());
                 double sourcePlayerBalance = reference.getEconomyManager().getBalance(sourcePlayer.getUniqueId());
-                reference.getLoggingManager().log("SOURCE_PLAYER: " + sourcePlayer + " - " + "TYPE: " + "SET" + " - " + sourcePlayerBalance);
+                reference.getLoggingManager().log("SOURCE_PLAYER: " + sourcePlayer + " - " + "TYPE: " + "PAY" + " - " + sourcePlayerBalance);
                 double targetPlayerBalance = reference.getEconomyManager().getBalance(targetUUID);
-                reference.getLoggingManager().log("TARGET_PLAYER: " + targetName + " - " + "TYPE: " + "SET" + " - " + targetPlayerBalance);
+                reference.getLoggingManager().log("TARGET_PLAYER: " + targetName + " - " + "TYPE: " + "PAY" + " - " + targetPlayerBalance);
                 return true;
             }
             default:
